@@ -1,0 +1,16 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Build Cooja and Start VNC
+    command: |
+      mkdir -p ~/.vnc
+      echo "CoojaVNC" | vncpasswd -f > ~/.vnc/passwd
+      chmod 600 ~/.vnc/passwd
+      vncserver :1 -geometry 1280x800 -depth 24
+      cd tools/cooja
+      ant jar
+      DISPLAY=:1 ant run
+ports:
+  - port: 5901
+    onOpen: open-preview
