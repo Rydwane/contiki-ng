@@ -4,13 +4,14 @@ image:
 tasks:
   - name: Build Cooja and Start VNC
     command: |
-      mkdir -p ~/.vnc
-      echo "CoojaVNC" | vncpasswd -f > ~/.vnc/passwd
-      chmod 600 ~/.vnc/passwd
-      vncserver :1 -geometry 1280x800 -depth 24
+      git submodule update --init --recursive
       cd tools/cooja
-      ant jar
-      DISPLAY=:1 ant run
+      ant run &
+      tail -f /dev/null
+
 ports:
   - port: 5901
     onOpen: open-preview
+    visibility: public
+
+
