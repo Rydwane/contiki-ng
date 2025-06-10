@@ -1,11 +1,11 @@
-FROM ubuntu:22.04
+FROM gitpod/workspace-full
 
-ENV DEBIAN_FRONTEND=noninteractive
+# Installer Java et dépendances nécessaires
+RUN sudo apt update && sudo apt install -y openjdk-11-jdk ant xvfb x11vnc fluxbox xterm tigervnc-standalone-server
 
-RUN apt-get update && apt-get install -y \
-    openjdk-11-jdk ant libgtk2.0-dev git git-lfs \
-    xfce4 xfce4-goodies tigervnc-standalone-server \
-    python3 python3-pip && \
-    rm -rf /var/lib/apt/lists/*
+# Configurer le mot de passe VNC (optionnel)
+RUN mkdir ~/.vnc && echo "password" | vncpasswd -f > ~/.vnc/passwd && chmod 600 ~/.vnc/passwd
 
-WORKDIR /workspace/contiki-ng
+# Démarrer automatiquement VNC
+CMD ["vncserver", ":1", "-geometry", "1280x800", "-depth", "24", "-SecurityTypes", "None"]
+
